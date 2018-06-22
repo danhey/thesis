@@ -1,0 +1,60 @@
+%------------------------ Preamble and bibliography resources
+\documentclass[12pt,oneside]{book}
+\input{frontmatter/preamble} 
+\usepackage{style/title}[PhD]
+
+%\makenomenclature
+
+% Add your bibtex file here
+%\addbibresource{library.bib}
+
+%------------------------ Main Document --------------------------
+\begin{document}
+	
+	%-------------- Information For The Title Page
+	\title{A cool sounding title goes here}
+	\author{Mr. Author}
+	\date{2018} 
+	\degree{Doctor of Philosophy (PhD)} 
+	\supervisor[1]{Dr. Doctor} % For multiple supervisors, \supervisor[2]{Supervisor 1 & 2}
+	\school{Physics}
+	
+	%-------------- Front Matter
+	\frontmatter
+	\maketitle
+	\declaration
+	
+	\include{frontmatter/abstract}
+	\include{frontmatter/acknowledgments}
+	
+	%-------------- Table of contents
+	\cleardoublepage
+	\phantomsection \pdfbookmark[0]{Contents}{Contents} 
+	\tableofcontents
+	\addcontentsline{toc}{chapter}{\listfigurename}
+	\listoffigures
+	\addcontentsline{toc}{chapter}{\listtablename}
+	\listoftables
+	
+	%\include{frontmatter/nomenclature}
+	%\printnomenclature
+	
+	%-------------- Chapters
+	\cleardoublepage
+	\mainmatter
+	\include{chapters/chapter1}
+	\include{chapters/chapter2}
+	
+	%-------------- Appendices
+	\cleardoublepage
+	\appendix
+	\include{appendices/appendix1}
+	
+	%-------------- Bibliography
+	\cleardoublepage
+	\phantomsection  
+	\addcontentsline{toc}{chapter}{Bibliography}              
+	\printbibliography
+	
+\end{document}  
+

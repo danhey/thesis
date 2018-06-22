@@ -1,0 +1,76 @@
+\usepackage{bm}
+\usepackage{geometry}
+  \geometry{a4paper,inner=3cm, outer=3cm, top=3cm, bottom=3cm}
+\pdfpagewidth=\paperwidth 
+\pdfpageheight=\paperheight
+
+%\usepackage[parfill]{parskip} 
+% Activate to begin paragraphs with an empty (return) line, comment out the indent below if you chose the return line option.
+
+\setlength{\parindent}{1em}  % Sets the length of the paragraph indent. Current setup has a an indent. Disable this if you activate the return line above.
+
+% Double or one and a half spacing.
+%\usepackage{setspace}
+% \singlespacing
+
+  
+\usepackage{graphicx}
+  \DeclareGraphicsRule{.tif}{png}{.jpg}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+ \graphicspath{{figures/}}
+% Graphics. Remove me and you won't have any figures, and that would be very boring.
+
+%\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+% Adds the ability to make coloured text and lines throughout the document. See documentation for xcolor.
+
+%-------------------- Tables, figures and captions
+\usepackage[font={small},labelfont={bf},margin=4ex]{caption}
+% Makes bold labeled and smaller font captions. Must be loaded before the longtable package to avoid conflicts! 
+
+\usepackage{longtable}
+% Long tables (more than one page). Different headers and footers for beginning and end pages, etc.
+
+\usepackage{afterpage}
+% Make a longtable start on the next clear page, but fills the previous one with text first (no random gaps in the text-from long tables anymore! Man, the day I discovered this...)
+
+\usepackage{booktabs}
+% Nice looking tables and lines in tables
+
+\usepackage{multirow}
+% Entries in tables over multiple rows
+
+\usepackage{lscape}
+% Pages in landscape
+
+\usepackage{pdflscape}
+% Landscape pages also rotated in the pdf
+
+\usepackage{wrapfig}
+% Allows figures that don't take up the entire width of the page, wrapping the text around the figure
+
+%\usepackage[position=top,singlelinecheck=false,captionskip=4pt]{subfig} 
+% Multiple figures in an individual figure. Fig. 1 a, b, c, etc. each with, or without, it's own individual caption, and with a global caption for all sub figures.
+
+%-------------------- Special symbols and fonts
+\usepackage{amssymb}
+% Maths symbols
+
+%-------------------- Document sections, headers, footers, and bibliography
+\usepackage{fancyhdr}
+
+%-------------------- Bibliography
+
+\usepackage[backend=biber,articletitle=true,style=chem-rsc,doi=false]{biblatex}
+
+
+%-------------------- Hyperlinks in your document.
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks   = true,
+	allcolors    = blue
+}
+% The hyperref package allows you to have clickable links in your pdf. It also allows you to have the mailto link associated with your name. It can be  a bit finicky, so load it last.
+
+%-------------------- Command renewals, New commands etc.
+\renewcommand{\thefootnote}{\arabic{footnote}}
+
+%-------------------- Add your own packages here

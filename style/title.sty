@@ -1,0 +1,625 @@
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{style/title}
+
+\RequirePackage{geometry}
+\RequirePackage{ragged2e} 
+\RequirePackage{setspace}
+\RequirePackage{etoolbox}
+\RequirePackage{graphicx}
+
+% If statements
+\newif\ifphd
+\newif\ifhonours
+\newif\ifmasters
+\newif\ifpartial
+\newif\ifnosupervisor
+\newif\ifmultiplesupervisors
+\newif\ifcosupervisor
+\newif\ifnocosupervisor
+\newif\ifmultiplecosupervisors
+\newif\ifsubject
+\newif\ifschool
+  \schooltrue
+  
+\newif\ifreport
+\newif\ifhorizontal
+\newif\ifaltpage
+\newif\iflogo
+  \logotrue
+  
+\newif\ifcopyright
+  %\copyrighttrue
+  
+\newif\ifdomestic
+  \domestictrue
+
+% For my memory
+%\ifvar
+%  true
+%\else
+%  false
+%\fi
+   
+% Declareing the package options.
+% The default wording for the thesis requirements for an honours thesis.
+\DeclareOption{honours}{%
+  \phdfalse
+  \mastersfalse
+  \honourstrue 
+  \partialtrue 
+  \subjectfalse
+}
+
+\DeclareOption{honors}{% for those less honourable of you who've shunned the u.
+  \phdfalse 
+  \mastersfalse
+  \honourstrue
+  \partialtrue 
+  \subjectfalse
+}
+
+% The default wording for the thesis requirements for a masters by coursework
+% thesis.
+\DeclareOption{mastersbycoursework}{%
+  \phdfalse
+  \masterstrue
+  \honoursfalse 
+  \partialtrue 
+  \subjectfalse
+}
+
+% The default wording for the thesis requirements for a masters by research
+% dissertation.
+\DeclareOption{mastersbyresearch}{%
+  \phdfalse 
+  \masterstrue
+  \honoursfalse
+  \partialfalse 
+  \subjectfalse
+}
+
+% The default wording for the thesis requirements for a PhD thesis.
+\DeclareOption{phd}{%
+  \phdtrue
+  \mastersfalse
+  \honoursfalse
+  \partialfalse
+  \subjectfalse
+  \degree{Doctor of Philosophy}
+}
+
+% The default wording for the thesis requirements for a PhD thesis, with option
+% capitalisation.
+\DeclareOption{PhD}{%
+  \phdtrue
+  \mastersfalse
+  \honoursfalse
+  \partialfalse
+  \subjectfalse
+  \reportfalse
+  \degree{Doctor of Philosophy}
+}
+
+% For theses or reports that are for an individual subject, not for the award of
+% a degree.
+\DeclareOption{partialsubject}{%
+  \copyrightfalse
+  \phdfalse
+  \mastersfalse
+  \honoursfalse
+  \reportfalse  
+  \partialtrue 
+  \subjecttrue
+}
+
+\DeclareOption{fullsubject}{%
+  \copyrightfalse
+  \phdfalse
+  \mastersfalse
+  \honoursfalse 
+  \subjecttrue
+  \reportfalse 
+  \partialfalse
+}
+
+\DeclareOption{report}{%
+  \copyrightfalse
+  \phdfalse
+  \mastersfalse
+  \honoursfalse 
+  \subjecttrue
+  \reporttrue 
+  \partialtrue 
+  \nosupervisortrue
+}
+
+% For all other thesis types. 
+\DeclareOption{other}{%
+  \phdfalse
+  \mastersfalse
+  \honoursfalse 
+  \partialtrue 
+  \subjectfalse
+  \reportfalse
+  \nosupervisortrue
+}
+
+% In case you belong to an institute or some other affiliation (such as AIIM)
+% instead of a school.
+\DeclareOption{noschool}{%
+  \newcommand\@schooltitle{} 
+  \newcommand\@school{}
+}
+
+% Determining the pluralisation (or absence) of 'supervisor' acording to the
+% number of supervisors.
+\DeclareOption{nosupervisor}{% also achievable by using \supervisor[0]{}
+  \nosupervisortrue
+  \cosupervisorfalse 
+  \multiplesupervisorsfalse
+}
+
+\DeclareOption{cosupervisor}{%
+  \nocosupervisorfalse
+  \cosupervisortrue
+}
+
+\DeclareOption{horizontal}{%
+  \horizontaltrue
+}
+
+\DeclareOption{nologo}{%
+  \logofalse
+}
+
+% These two options have been left in for legacy purposes, but are no longer
+% needed as the \supervisor Command has been modifed to have an optional field
+% that specifies the number of supervisors.
+\DeclareOption{onesupervisor}{%
+  \nosupervisorfalse 
+  \multiplesupervisorsfalse
+}
+
+\DeclareOption{multiplesupervisors}{%
+  \nosupervisorfalse 
+  \multiplesupervisorstrue
+}
+
+\DeclareOption{nocopyright}{%
+  \copyrightfalse
+}
+
+\DeclareOption{international}{%
+  \domesticfalse
+}
+
+\DeclareOption{nortpacknowledgement}{%
+  \domesticfalse
+}
+
+% Definitely not another page layout that is more aesthetically pleasing. 
+% No-sir-ee. Not here.
+\DeclareOption{altpage}{%
+  \altpagetrue
+}
+
+% Defining the default values of the macros within \maketitle
+
+% Fields already in the \maketitle Command
+\renewcommand\@title{%
+  Title of Your \ifreport Report\else \ifsubject Dissertation\else Thesis\fi\fi%
+  \@latex@warning@no@line{No \noexpand\title specified!}
+}
+
+\renewcommand\@author{%
+  Student's Full Name%
+  \@latex@warning@no@line{No \noexpand\author specified!}%
+}
+
+\renewcommand\@date{%
+  \ifcase \month%
+      \or January%
+      \or February%
+      \or March%
+      \or April%
+      \or May%
+      \or June%
+      \or July%
+      \or August%
+      \or September%
+      \or October%
+      \or November%
+      \or December%
+  \fi, \number \the\year%
+}
+
+% These are the new fields not currently in the standard \maketitle macro.
+% \supervisor[]{}
+% Dummy text
+\newcommand\@supervisor{%
+  Your Supervisor(s)%
+  \@latex@warning@no@line{No \noexpand\supervisor specified!}
+}
+% Command
+\newcommand{\supervisor}[2][1]{%
+  \gdef\@supervisor{#2}%
+  \ifnumless{#1}{1}{% true
+    \nosupervisortrue
+    \multiplesupervisorsfalse
+  }
+  {}% false
+  \ifnumequal{#1}{1}{% true
+    \nosupervisorfalse 
+    \multiplesupervisorsfalse
+  }
+  {}% false
+  \ifnumgreater{#1}{1}{% true
+    \nosupervisorfalse 
+    \multiplesupervisorstrue
+  }%
+  {}% false
+}
+
+% \cosupervisor[]{}
+% Dummy text
+\newcommand\@cosupervisor{%
+  {Your Co-supervisor(s)}%
+}
+% Command
+\newcommand{\cosupervisor}[2][1]{%
+  \gdef\@cosupervisor{#2}
+  \ifnumless{#1}{1}{% true
+    \cosupervisorfalse
+    \nocosupervisortrue
+    \multiplecosupervisorsfalse
+  }
+  {}% false
+  \ifnumequal{#1}{1}{% true
+    \cosupervisortrue
+    \nocosupervisorfalse 
+    \multiplecosupervisorsfalse
+  }
+    {}% false
+  \ifnumgreater{#1}{1}{% true
+    \cosupervisortrue
+    \nocosupervisorfalse 
+    \multiplecosupervisorstrue
+  }
+  {}% false
+}
+
+% \degree{}
+% Dummy text
+\newcommand\@degree{%
+  Your Degree%
+  \ifsubject{}%
+  \else{%
+    \@latex@warning@no@line{No \noexpand\degree specified!}%
+  }%
+  \fi
+}
+% Command
+\newcommand{\degree}[1]{%
+  \gdef\@degree{#1}%
+}
+
+% \subject{}
+% Dummy text 
+\newcommand\@subject{%
+  Your Class%
+  \@latex@warning@no@line{No \noexpand\subject specified!}%
+}
+% Command
+\newcommand{\subject}[1]{%
+  \gdef\@subject{#1}%
+} 
+
+% \school{}
+% Dummy text
+\newcommand\@school{%
+  Your School%
+  \@latex@warning@no@line{No \noexpand\school specified!}%
+}
+
+% Command
+\newcommand{\school}[1]{%
+  \gdef\@school{#1}%
+}
+
+% Internal command for the wording of the title page.
+\newcommand\@graphic{%
+  \includegraphics[height=1.5\crestheight]{style/logo-mono}%
+}
+
+% Command
+% Image must be in the working directory for this Command to work
+\newcommand{\graphic}[1]{%
+  \gdef\@graphic{#1}%
+}
+
+% Internal command for the wording of the title page.
+\newcommand\@requirement{%
+  \ifreport This report submitted as part of the assessment schedule for: %
+  \else This \ifsubject dissertation \else thesis \fi is presented as %
+  \ifpartial part of the requirements \else required \fi \ifsubject for %
+  completion of: \else for the conferral of the degree:\fi%
+\fi
+}
+
+% Internal command for the wording of the title page.
+\newcommand\@schooltitle{%
+  School of%
+}
+
+%
+% Research Training  Program requirement for research students to acknowledge
+% the Australian Government RTP Scholarship in all research publications.
+%
+\newcommand{\RTPacknowledgement}{%
+  %This research has been conducted with the support of an Australian %
+ % Government Research Training Program Scholarship.%
+}
+
+% \newcommand{\director}[1]{\gdef\@director{#1}}%
+% \newcommand{\@director}{\@latex@warning@no@line{No \noexpand\director specified!}}
+
+% Command
+\newcommand{\copyrighttext}[1]{%
+  \gdef\@copyrighttext{#1}%
+}
+
+\newcommand\@copyrighttext{%
+  \begin{raggedright}
+    \begin{singlespace}
+      This work \textcopyright{} copyright by \@author, \the\year. All Rights %
+      Reserved.
+      
+      \vspace{\smallgap}%
+      No part of this work may be reproduced, stored in a retrieval system, %
+      transmitted, in any form or by any means, electronic, mechanical, %
+      photocopying, recording, or otherwise, without the prior permission of %
+      the author or the University of Sydney.%
+      
+      \ifdomestic{%
+        \vspace{\smallgap}%
+        \RTPacknowledgement%
+      }%
+      \else{}%
+      \fi%
+    \end{singlespace}
+  \end{raggedright}
+}
+
+%
+% Declaration page
+%
+% This is a new Command (\declaration) that if you desire you can use to print
+% the standard thesis submission declaration.
+\newcommand{\declaration}{%
+  \thispagestyle{empty}
+  \section*{Declaration}
+  \begin{singlespacing}
+    I, \emph{\@author}, declare that this \ifreport report \else \ifsubject %
+    dissertation \else thesis \fi \fi is submitted in \ifpartial partial \fi %
+    fulfilment of the requirements for \ifsubject the completion of %
+    \emph{\@subject{}}, \else the conferral of the degree \emph{\@degree{}}, %
+    from the University of Sydney, \fi is wholly my own work unless %
+    otherwise referenced or acknowledged. This document has not been submitted %
+    for qualifications at any other academic institution.%
+    \par
+    \vspace{\fill}%
+    \noindent\rule{0.4\linewidth}{0.5pt}%
+    \vspace{1em}%
+    \par
+    \noindent\textbf{\@author}\vspace{1em}%
+    \par
+    \noindent\today
+  \end{singlespacing}
+  \clearpage{\pagestyle{empty}\cleardoublepage}
+}
+
+%
+% Lengths
+%
+% Calculate the size of the gaps between fields relative to the paper height.
+% Just in case A4 is not used. The title page should cope with up to A5, but 
+% document fontsize does need to be taken down to 10 pt. In the future I 
+% hope to implement something that changes the font size according to paper 
+% size. 
+%
+\newlength{\biggap}
+\setlength{\biggap}{0.10\paperheight}
+% for A4 paper this is approximately 29 mm.
+
+\newlength{\midgap}
+\setlength{\midgap}{0.044\paperheight}
+% for A4 paper this is approximately 13 mm.
+
+\newlength{\smallgap}
+\setlength{\smallgap}{0.024\paperheight}
+% for A4 paper this is approximately 7 mm.
+
+\newlength{\vsmallgap}
+\setlength{\vsmallgap}{0.012\paperheight}
+% for A4 paper this is approximately 3.5 mm.
+
+\newlength{\crestheight}
+\setlength{\crestheight}{0.068\paperheight}
+% for A4 paper this is approximately 20 mm.
+
+\newlength{\innersidemargin}
+% \setlength{\innersidemargin}{0.135\paperheight}
+% for A4 paper this is approximately 40 mm.
+\setlength{\innersidemargin}{0.10\paperheight}
+% for A4 paper this is approximately 29 mm
+
+\newlength{\outersidemargin}
+\setlength{\outersidemargin}{0.10\paperheight}
+% for A4 paper this is approximately 29 mm.
+
+\newlength{\topsidemargin}
+\setlength{\topsidemargin}{0.068\paperheight}
+% for A4 paper this is approximately 20 mm.
+
+\newlength{\bottomsidemargin}
+\setlength{\bottomsidemargin}{0.10\paperheight}
+% for A4 paper this is approximately 29 mm.
+
+%
+% Title page
+%
+% Here we actually set up the title page.
+%
+\renewcommand{\maketitle}{%
+  \thispagestyle{empty}
+  \newgeometry{%
+    inner=\innersidemargin,%
+    outer=\outersidemargin,%
+    top=\topsidemargin,%
+    bottom=\bottomsidemargin%
+  }%
+  \begin{center}
+    \begin{singlespacing}
+      \ifsubject{}
+      \else{%
+       \iflogo{%
+         \@graphic\\
+       }%
+       \else{}%
+       \fi%
+      }%
+      \fi
+      \textbf{%
+       \vspace{\biggap}\\%
+       {\Large\@title}\\%
+       \vspace{\midgap}%
+      }%
+      \@author\\%
+      \vspace{\midgap}%
+      \textit{%
+       \@requirement%
+      }\\%
+      \ifsubject{%
+       \vspace{\smallgap}%
+       \@subject\\%
+       \vspace*{\fill}%
+      }%
+      \else{%
+       \vspace{\smallgap}%
+       \@degree\\%
+       \vspace*{\fill}%
+      }%
+      \fi
+      \ifhorizontal{%
+       \ifcosupervisor{%
+         \begin{tabular}{@{}ll@{}}
+         \ifmultiplesupervisors{%
+           Supervisors:%
+         }%
+         \else{%
+           Supervisor:%
+         }%
+         \fi%
+         &%
+         \ifmultiplecosupervisors{%
+           Co-supervisors:%
+         }%
+         \else{%
+           Co-supervisor:%
+         }\\%
+         \fi
+         \@supervisor%
+         &%
+         \@cosupervisor%
+         \end{tabular}
+       }\\%
+       \else{%
+         \ifnosupervisor{}%
+         \else{%
+           \ifmultiplesupervisors{%
+             Supervisors:\\%
+             \@supervisor%
+           }\\% 
+           \else{%
+             Supervisor:\\%
+             \@supervisor%
+           }\\%
+           \fi
+         }%
+         \fi
+       }%
+       \fi%
+      }%
+      \else{%
+         \ifnosupervisor{}%
+         \else{%
+           \ifmultiplesupervisors{%
+             Supervisors:\\%
+             \@supervisor\\%
+             \vspace{1ex}%
+           }%
+           \else{%
+             Supervisor:\\%
+             \@supervisor\\%
+             \vspace{1ex}%
+           }%
+           \fi%
+         }%
+         \fi%
+         \ifcosupervisor{%
+           \ifmultiplecosupervisors{%
+             Co-supervisors:\\%
+             \@cosupervisor\\%
+           }%
+           \else{%
+             Co-supervisor:\\%
+             \@cosupervisor\\%
+           }%
+           \fi%
+         }%
+         \else{}%
+         \fi%
+       }%
+      \fi%
+      \vspace{\midgap}%
+      The University of Sydney\\%
+      \ifschool{%
+        \noindent\@schooltitle{} \@school\\%
+      }%
+      \else{}%
+      \fi%
+      \vspace{\midgap}%
+      \@date\vspace{\smallgap}%
+    \end{singlespacing}
+  \end{center}
+  \ifcopyright{%
+    \clearpage%
+    \newgeometry{%
+      inner=\innersidemargin,%
+      outer=\outersidemargin,%
+      top=\topsidemargin,%
+      bottom=\bottomsidemargin%
+    }%
+    \thispagestyle{empty}%
+    \begin{raggedright}
+      \begin{singlespacing}
+        \vspace*{\fill}%
+        \footnotesize%
+        \@copyrighttext%
+      \end{singlespacing}
+    \end{raggedright}
+    \restoregeometry
+  }%
+  \else{}%
+  \fi%
+  \restoregeometry
+  \clearpage{\pagestyle{empty}\cleardoublepage}
+}
+
+% Execute the default options, print supervisor field and requirements for an
+% honours thesis.
+\ExecuteOptions{honours}
+\ProcessOptions\relax
+\endinput
+
+% Quidquid latine dictum sit altum videtur.
